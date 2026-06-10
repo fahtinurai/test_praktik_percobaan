@@ -21,8 +21,20 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      # Continuous Integration
       - name: Compile Project
         run: mvn clean compile
 
+      # Continuous Testing
       - name: Run Tests
         run: mvn test
+
+      # Continuous Deployment
+      - name: Package Application
+        run: mvn package
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: basic-java-maven
+          path: target/*.jar
