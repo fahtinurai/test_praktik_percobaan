@@ -1,0 +1,38 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sonar:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Cache Sonar Packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: Build Project
+        run: mvn clean verify
+
+      - name: SonarCloud Scan
+        run: |
+          mvn sonar:sonar \
+          -Dsonar.projectKey=fahtinurai_test_praktik_percobaan \
+          -Dsonar.organization=adefathian \
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
